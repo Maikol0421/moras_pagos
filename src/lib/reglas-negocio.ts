@@ -133,3 +133,19 @@ export function formatearMoneda(valor: number): string {
     valor,
   );
 }
+
+/**
+ * Versión corta para etiquetas de gráfica donde el monto completo ("$55,411")
+ * se amontona (ejes/etiquetas en móvil): "$55K", "$2K", "$1.3M". El valor
+ * exacto sigue disponible en el tooltip, que usa `formatearMoneda`.
+ */
+export function formatearMonedaCompacta(valor: number): string {
+  const absoluto = Math.abs(valor);
+  if (absoluto >= 1_000_000) {
+    return `$${(valor / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+  }
+  if (absoluto >= 1_000) {
+    return `$${Math.round(valor / 1_000)}K`;
+  }
+  return `$${Math.round(valor)}`;
+}

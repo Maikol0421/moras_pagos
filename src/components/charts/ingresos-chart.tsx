@@ -1,7 +1,7 @@
 "use client";
 
 import { BarChart } from "@mui/x-charts/BarChart";
-import { formatearMoneda, nombrePeriodoCorto } from "@/lib/reglas-negocio";
+import { formatearMoneda, formatearMonedaCompacta, nombrePeriodoCorto } from "@/lib/reglas-negocio";
 
 interface IngresosChartProps {
   datos: { periodo: string; monto: number }[];
@@ -16,14 +16,15 @@ export function IngresosChart({ datos, altura = 260 }: IngresosChartProps) {
     <BarChart
       dataset={dataset}
       xAxis={[{ scaleType: "band", dataKey: "etiqueta", tickLabelStyle: { fontSize: 12 } }]}
-      yAxis={[{ tickLabelStyle: { fontSize: 11 }, valueFormatter: (valor: number) => formatearMoneda(valor) }]}
+      yAxis={[{ tickLabelStyle: { fontSize: 11 }, valueFormatter: (valor: number) => formatearMonedaCompacta(valor) }]}
       series={[
         {
           dataKey: "monto",
           label: "Ingresos",
           color: "#2a78d6",
+          // Tooltip: monto exacto. Etiqueta sobre la barra: versión compacta para que no se amontone en móvil.
           valueFormatter: (valor) => formatearMoneda(valor ?? 0),
-          barLabel: (item) => formatearMoneda(item.value ?? 0),
+          barLabel: (item) => formatearMonedaCompacta(item.value ?? 0),
           barLabelPlacement: "outside",
         },
       ]}
